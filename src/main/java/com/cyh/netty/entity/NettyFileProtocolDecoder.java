@@ -1,4 +1,4 @@
-package com.cyh.netty.Entity;
+package com.cyh.netty.entity;
 
 import com.cyh.netty.constant.ConstantValue;
 import com.cyh.netty.util.SerializeUtil;

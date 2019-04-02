@@ -1,6 +1,5 @@
-package com.cyh.netty.Entity;
+package com.cyh.netty.entity;
 
-import com.cyh.netty.constant.ConstantValue;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.MessageToByteEncoder;
