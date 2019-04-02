@@ -5,6 +5,7 @@ import io.netty.channel.EventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Scope;
 
 @Configuration
 public class nettyServerConfig {
@@ -19,6 +20,7 @@ public class nettyServerConfig {
         return new NioEventLoopGroup();
     }
 
+    @Scope("prototype")
     @Bean("sb")
     public ServerBootstrap createServerBootstrap(){
         return new ServerBootstrap();
