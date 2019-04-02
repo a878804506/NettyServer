@@ -31,10 +31,10 @@ public class NettyServerFilter extends ChannelInitializer<SocketChannel> {
         ph.addLast(new IdleStateHandler(5, 0, 0, TimeUnit.SECONDS));
         // 解码和编码，应和客户端一致
         //传输的协议 Protobuf
-        ph.addLast(new ProtobufVarint32FrameDecoder());
+//        ph.addLast(new ProtobufVarint32FrameDecoder());
 //        ph.addLast(new ProtobufDecoder(UserMsg.getDefaultInstance()));
-        ph.addLast(new ProtobufVarint32LengthFieldPrepender());
-        ph.addLast(new ProtobufEncoder());
+//        ph.addLast(new ProtobufVarint32LengthFieldPrepender());
+//        ph.addLast(new ProtobufEncoder());
         //业务逻辑实现类
         ph.addLast("nettyServerHandler", nettyServerHandler);
 
