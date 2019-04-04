@@ -1,4 +1,4 @@
-package com.cyh.netty.nettyServer;
+package com.cyh.netty.nettyFileTransferServer;
 
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.ChannelFuture;

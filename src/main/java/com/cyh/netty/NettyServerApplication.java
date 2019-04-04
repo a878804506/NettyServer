@@ -1,6 +1,6 @@
 package com.cyh.netty;
 
-import com.cyh.netty.nettyServer.NettyServer;
+import com.cyh.netty.nettyFileTransferServer.NettyServer;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ConfigurableApplicationContext;

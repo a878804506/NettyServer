@@ -1,5 +1,6 @@
-package com.cyh.netty.nettyServer;
+package com.cyh.netty.nettyFileTransferServer;
 
+import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
 import io.netty.handler.timeout.IdleState;
@@ -8,12 +9,12 @@ import io.netty.util.ReferenceCountUtil;
 import org.springframework.stereotype.Service;
 
 @Service
+@ChannelHandler.Sharable
 public class NettyServerHandler extends ChannelInboundHandlerAdapter {
     /** 空闲次数 */
     private int idle_count = 1;
     /** 发送次数 */
     private int count = 1;
-
 
     /**
      * 建立连接时，发送一条消息
