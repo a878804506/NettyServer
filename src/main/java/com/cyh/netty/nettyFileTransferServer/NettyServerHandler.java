@@ -50,7 +50,6 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
      */
     @Override
     public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
-
         try {
             if(msg instanceof NettyFileProtocol) {
                 NettyFileProtocol nfp = (NettyFileProtocol) msg;

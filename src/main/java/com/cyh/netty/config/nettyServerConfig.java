@@ -21,7 +21,7 @@ public class nettyServerConfig {
     }
 
     @Scope("prototype")
-    @Bean("sb")
+    @Bean("serverBootstrap")
     public ServerBootstrap createServerBootstrap(){
         return new ServerBootstrap();
     }
