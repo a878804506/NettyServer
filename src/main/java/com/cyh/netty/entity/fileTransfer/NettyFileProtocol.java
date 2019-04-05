@@ -1,4 +1,4 @@
-package com.cyh.netty.entity;
+package com.cyh.netty.entity.fileTransfer;
 
 import com.cyh.netty.constant.ConstantValue;
 
@@ -18,7 +18,7 @@ public class NettyFileProtocol implements java.io.Serializable{
     private int head_data = ConstantValue.HEAD_DATA;
     //消息的长度
     private int contentLength;
-    //消息的类型  定义: 2->图片   3->文件
+    //消息的类型  定义: -1->心跳  2->图片   3->文件
     private int contentType;
     //消息发送者id
     private int fronUserId;
@@ -28,14 +28,17 @@ public class NettyFileProtocol implements java.io.Serializable{
     private long time;
     //消息的内容
     private byte[] content;
+    //结果
+    private boolean result;
 
-    public NettyFileProtocol(int contentLength, int contentType, int fronUserId, int toUserId, long time, byte[] content) {
+    public NettyFileProtocol(int contentLength, int contentType, int fronUserId, int toUserId, long time, byte[] content,boolean result) {
         this.contentLength = contentLength;
         this.contentType = contentType;
         this.fronUserId = fronUserId;
         this.toUserId = toUserId;
         this.time = time;
         this.content = content;
+        this.result = result;
     }
 
     public int getHead_data() {
@@ -94,6 +97,14 @@ public class NettyFileProtocol implements java.io.Serializable{
         this.content = content;
     }
 
+    public boolean isResult() {
+        return result;
+    }
+
+    public void setResult(boolean result) {
+        this.result = result;
+    }
+
     @Override
     public String toString() {
         return "NettyFileProtocol{" +
@@ -104,6 +115,7 @@ public class NettyFileProtocol implements java.io.Serializable{
                 ", toUserId=" + toUserId +
                 ", time=" + time +
                 ", content=" + Arrays.toString(content) +
+                ", result=" + result +
                 '}';
     }
 }

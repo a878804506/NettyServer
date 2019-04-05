@@ -1,10 +1,11 @@
 package com.cyh.netty.nettyFileTransferServer;
 
-import com.cyh.netty.entity.NettyFileProtocolDecoder;
-import com.cyh.netty.entity.NettyFileProtocolEncoder;
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.ChannelPipeline;
 import io.netty.channel.socket.SocketChannel;
+import io.netty.handler.codec.serialization.ClassResolvers;
+import io.netty.handler.codec.serialization.ObjectDecoder;
+import io.netty.handler.codec.serialization.ObjectEncoder;
 import io.netty.handler.timeout.IdleStateHandler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -27,18 +28,12 @@ public class NettyServerFilter extends ChannelInitializer<SocketChannel> {
         //入参说明: 读超时时间、写超时时间、所有类型的超时时间、时间格式
         ph.addLast(new IdleStateHandler(5, 0, 0, TimeUnit.SECONDS));
         // 解码和编码，应和客户端一致
-        //传输的协议 Protobuf
-//        ph.addLast(new ProtobufVarint32FrameDecoder());
-//        ph.addLast(new ProtobufDecoder(UserMsg.getDefaultInstance()));
-//        ph.addLast(new ProtobufVarint32LengthFieldPrepender());
-//        ph.addLast(new ProtobufEncoder());
-        //业务逻辑实现类
-        ph.addLast("nettyServerHandler", nettyServerHandler);
 
         // 添加自定义协议的编解码工具
-        ph.addLast(new NettyFileProtocolDecoder());
-        ph.addLast(new NettyFileProtocolEncoder());
-        // 处理网络IO
-        ph.addLast(new NettyServerHandler());
+        ph.addLast(new ObjectDecoder(Integer.MAX_VALUE, ClassResolvers.weakCachingConcurrentResolver(this.getClass().getClassLoader())));
+        ph.addLast(new ObjectEncoder());
+
+        //业务逻辑实现类
+        ph.addLast("nettyServerHandler", nettyServerHandler);
     }
 }

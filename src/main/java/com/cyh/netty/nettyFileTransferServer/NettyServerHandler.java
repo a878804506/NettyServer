@@ -1,5 +1,7 @@
 package com.cyh.netty.nettyFileTransferServer;
 
+import com.cyh.netty.entity.fileTransfer.NettyFileProtocol;
+import com.cyh.netty.util.CommonUtil;
 import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
@@ -12,18 +14,15 @@ import org.springframework.stereotype.Service;
 @ChannelHandler.Sharable
 public class NettyServerHandler extends ChannelInboundHandlerAdapter {
     /** 空闲次数 */
-    private int idle_count = 1;
-    /** 发送次数 */
-    private int count = 1;
+    private int idle_count = 0;
 
     /**
      * 建立连接时，发送一条消息
      */
     @Override
     public void channelActive(ChannelHandlerContext ctx) throws Exception {
-        System.out.println("连接的客户端地址:" + ctx.channel().remoteAddress());
-//        UserInfo.UserMsg userMsg = UserInfo.UserMsg.newBuilder().setId(1).setAge(18).setName("xuwujing").setState(0).build();
-        ctx.writeAndFlush("连接成功");
+        CommonUtil.print("连接的客户端地址:" + ctx.channel().remoteAddress());
+        idle_count = 1;
         super.channelActive(ctx);
     }
 
@@ -35,9 +34,8 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
         if (obj instanceof IdleStateEvent) {
             IdleStateEvent event = (IdleStateEvent) obj;
             if (IdleState.READER_IDLE.equals(event.state())) { // 如果读通道处于空闲状态，说明没有接收到心跳命令
-                System.out.println("已经5秒没有接收到客户端的信息了");
-                if (idle_count > 1) {
-                    System.out.println("关闭这个不活跃的channel");
+                if (idle_count >= 3) {
+                    CommonUtil.print("关闭这个不活跃的channel！");
                     ctx.channel().close();
                 }
                 idle_count++;
@@ -52,28 +50,30 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
      */
     @Override
     public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
-        System.out.println("第" + count + "次" + ",服务端接受的消息:" + msg);
+
         try {
-            // 如果是protobuf类型的数据
-            /*if (msg instanceof UserMsg) {
-                UserInfo.UserMsg userState = (UserInfo.UserMsg) msg;
-                if (userState.getState() == 1) {
-                    System.out.println("客户端业务处理成功!");
-                } else if(userState.getState() == 2){
-                    System.out.println("接受到客户端发送的心跳!");
-                }else{
-                    System.out.println("未知命令!");
+            if(msg instanceof NettyFileProtocol) {
+                NettyFileProtocol nfp = (NettyFileProtocol) msg;
+                switch (nfp.getContentType()){
+                    case -1: //客户端发送过来的心跳包
+                        idle_count = 1; // 超时机制重置
+                        break;
+                    case 2 : // 客户端发送过来的图片
+
+                        break;
+                    case 3 : // 客户端发送过来的文件
+
+                        break;
                 }
-            } else {*/
-                System.out.println("未知数据!" + msg);
-                return;
-//            }
+            }else{
+                CommonUtil.print("未知数据!丢弃！" );
+            }
+//            ctx.channel().writeAndFlush(new NettyFileProtocol(3,3,3,3,3,new byte[1024*1024*20]));
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
             ReferenceCountUtil.release(msg);
         }
-        count++;
     }
 
     /**

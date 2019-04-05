@@ -1,5 +1,6 @@
 package com.cyh.netty.nettyFileTransferServer;
 
+import com.cyh.netty.util.CommonUtil;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.EventLoopGroup;
@@ -37,7 +38,7 @@ public class NettyServer {
             serverBootstrap.childHandler(nettyServerFilter); // 设置过滤器
             // 服务器绑定端口监听
             ChannelFuture f = serverBootstrap.bind(serverProt).sync();
-            System.out.println("服务端启动成功,端口是:" + serverProt);
+            CommonUtil.print("服务端启动成功,端口是:" + serverProt);
             // 监听服务器关闭监听
             f.channel().closeFuture().sync();
         } catch (InterruptedException e) {
