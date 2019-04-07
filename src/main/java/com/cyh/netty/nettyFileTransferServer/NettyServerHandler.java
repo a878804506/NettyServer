@@ -1,6 +1,7 @@
 package com.cyh.netty.nettyFileTransferServer;
 
 import com.cyh.netty.entity.fileTransfer.NettyFileProtocol;
+import com.cyh.netty.util.ByteToFileUtil;
 import com.cyh.netty.util.CommonUtil;
 import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelHandlerContext;
@@ -8,6 +9,7 @@ import io.netty.channel.ChannelInboundHandlerAdapter;
 import io.netty.handler.timeout.IdleState;
 import io.netty.handler.timeout.IdleStateEvent;
 import io.netty.util.ReferenceCountUtil;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -15,6 +17,9 @@ import org.springframework.stereotype.Service;
 public class NettyServerHandler extends ChannelInboundHandlerAdapter {
     /** 空闲次数 */
     private int idle_count = 0;
+
+    @Value("${nginx.staticMessageFilePath}")
+    private String staticMessageFilePath ;
 
     /**
      * 建立连接时，发送一条消息
@@ -58,7 +63,9 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
                         idle_count = 1; // 超时机制重置
                         break;
                     case 2 : // 客户端发送过来的图片
-
+                        ByteToFileUtil.byteToFile(nfp.getContent(),
+                                staticMessageFilePath+nfp.getFronUserId()+"_"+nfp.getToUserId()+"_"+
+                                nfp.getTime()+"_"+nfp.getUuNum()+"."+nfp.getFileExt());
                         break;
                     case 3 : // 客户端发送过来的文件
 
