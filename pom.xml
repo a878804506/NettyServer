@@ -9,9 +9,9 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.cyh.netty</groupId>
-	<artifactId>nettyServer</artifactId>
+	<artifactId>NettyServer</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>netty-server</name>
+	<name>NettyServer</name>
 	<description>通信服务端</description>
 
 	<properties>
