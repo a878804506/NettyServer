@@ -61,11 +61,13 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
                 switch (nfp.getContentType()){
                     case -1: //客户端发送过来的心跳包
                         idle_count = 1; // 超时机制重置
+                        CommonUtil.print("客户端发来心跳："+ ctx.channel().remoteAddress() );
                         break;
                     case 2 : // 客户端发送过来的图片
                         ByteToFileUtil.byteToFile(nfp.getContent(),
                                 staticMessageFilePath+nfp.getFronUserId()+"_"+nfp.getToUserId()+"_"+
                                 nfp.getTime()+"_"+nfp.getUuNum()+"."+nfp.getFileExt());
+                        CommonUtil.print("客户端发来的图片数据："+ nfp.toString() );
                         break;
                     case 3 : // 客户端发送过来的文件
 
